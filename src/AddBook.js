@@ -6,9 +6,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
-function AddTodo(props) {
+function AddBook(props) {
   const [open, setOpen] = useState(false);
-  const [todo, setTodo] = useState({description: '', date: '', priority: ''});
+  const [book, setBook] = useState({title: '', author: '', year: '', isbn:'', price:''});
 
   const handleOpen = () => {
     setOpen(true);
@@ -19,46 +19,62 @@ function AddTodo(props) {
   }
 
   const handleSave = () => {
-    props.addTodo(todo);
+    props.addBook(book);
     handleClose();
   }
 
   const inputChanged = (event) => {
-    setTodo({...todo, [event.target.name]: event.target.value});
+    setBook({...book, [event.target.name]: event.target.value});
   }
 
   return(
     <div>
       <Button variant="outlined" color="primary" onClick={handleOpen}>
-        Add todo
+        ADD BOOK
       </Button>
      <Dialog open={open}>
-       <DialogTitle>New todo</DialogTitle>
+       <DialogTitle>New book</DialogTitle>
        <DialogContent> 
          <TextField
-            name="description"
-            value={todo.description}
+            name="title"
+            value={book.title}
             onChange={inputChanged}
             margin="dense"
-            label="Description"
+            label="Title"
             fullWidth
           /> 
          <TextField
-           name="date"
-           value={todo.date}
+           name="author"
+           value={book.author}
            onChange={inputChanged}
            margin="dense"
-           label="Date"
+           label="Author"
            fullWidth
          /> 
          <TextField
-           name="priority"
-           value={todo.priority}
+           name="year"
+           value={book.year}
            onChange={inputChanged}
            margin="dense"
-           label="Priority"
+           label="Year"
            fullWidth
          /> 
+         <TextField
+           name="isbn"
+           value={book.isbn}
+           onChange={inputChanged}
+           margin="dense"
+           label="Isbn"
+           fullWidth
+         />
+         <TextField
+           name="price"
+           value={book.price}
+           onChange={inputChanged}
+           margin="dense"
+           label="Price"
+           fullWidth
+         />
       </DialogContent>
       <DialogActions>
          <Button color="primary" onClick={handleClose}>Cancel</Button>
@@ -69,4 +85,4 @@ function AddTodo(props) {
   );
 }
 
-export default AddTodo;
+export default AddBook;

@@ -5,23 +5,22 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddTodo from './AddTodo';
+import AddBook from './AddBook';
 
 import './App.css';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
     fetchItems();
   }, [])
 
   const fetchItems = () => {
-    fetch('https://todolist-e8512-default-rtdb.europe-west1.firebasedatabase.app/items/.json')
+    fetch('https://bookstore-ebf2d-default-rtdb.europe-west1.firebasedatabase.app/books/.json')
     .then(response => response.json())
-    .then(data => setTodos(Object.values(data)))
     .then(data => addKeys(data))
     .catch(err => console.error(err))
   }
@@ -30,19 +29,19 @@ function App() {
     const keys = Object.keys(data);
     const valueKeys = Object.values(data).map((item, index) => 
     Object.defineProperty(item, 'id', {value: keys[index]}));
-    setTodos(valueKeys);
+    setBooks(valueKeys);
   }
-  const addTodo = (newTodo) => {
-    fetch('https://todolist-e8512-default-rtdb.europe-west1.firebasedatabase.app/items/.json',
+  const addBook = (newBook) => {
+    fetch('https://bookstore-ebf2d-default-rtdb.europe-west1.firebasedatabase.app/books/.json',
     {
       method: 'POST',
-      body: JSON.stringify(newTodo)
+      body: JSON.stringify(newBook)
     })
     .then(response => fetchItems())
     .catch(err => console.error(err))
   }
-  const deleteTodo = (id) => {
-    fetch(`https://[YOUR_APPID].firebasedatabase.app/items/${id}.json`,
+  const deleteBook = (id) => {
+    fetch(`https://bookstore-ebf2d-default-rtdb.europe-west1.firebasedatabase.app/books/${id}.json`,
     {
       method: 'DELETE',
     })
@@ -55,22 +54,24 @@ function App() {
       <AppBar position="static">
        <Toolbar>
          <Typography variant="h5" noWrap>
-           TodoList
+           Bookstore
          </Typography>
        </Toolbar>
       </AppBar> 
-     <AddTodo addTodo={addTodo} /> 
-      <div className="ag-theme-material" style={ { height: 400, width: 600, margin: 'auto' } }>
-        <AgGridReact rowData={todos}>
-          <AgGridColumn sortable={true} filter={true} field='description' />
-          <AgGridColumn sortable={true} filter={true} field='date' />
-          <AgGridColumn sortable={true} filter={true} field='priority' />
+     <AddBook addBook={addBook} /> 
+      <div className="ag-theme-material" style={ { height: 400, width: 1130, margin: 'auto' } }>
+        <AgGridReact rowData={books}>
+          <AgGridColumn sortable={true} filter={true} field='title' />
+          <AgGridColumn sortable={true} filter={true} field='author' />
+          <AgGridColumn sortable={true} filter={true} field='year' />
+          <AgGridColumn sortable={true} filter={true} field='isbn' />
+          <AgGridColumn sortable={true} filter={true} field='price' />
           <AgGridColumn 
             headerName=''
             field='id' 
             width={90}
             cellRenderer={ params => 
-              <IconButton onClick={() => deleteTodo(params.value)} size="small" color="error">
+              <IconButton onClick={() => deleteBook(params.value)} size="small" color="error">
                 <DeleteIcon />
               </IconButton>
             }
@@ -80,5 +81,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
